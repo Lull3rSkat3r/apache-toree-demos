@@ -1,0 +1,25 @@
+{
+  "language_info": {
+    "name": "scala"
+  },
+  "display_name": "Eclairjs Toree",
+  "env": {
+    "SPARK_HOME": "/usr/local/spark",
+    "SPARK_OPTS": "--jars /home/jovyan/.local/share/jupyter/kernels/eclairjs/eclairjs-nashorn-jar-with-dependencies.jar",
+    "CAPTURE_STANDARD_ERR": "true",
+    "MAX_INTERPRETER_THREADS": "16",
+    "CAPTURE_STANDARD_OUT": "true",
+    "SEND_EMPTY_OUTPUT": "false"
+  },
+  "argv": [
+    "/home/jovyan/.local/share/jupyter/kernels/eclairjs/bin/run.sh",
+    "--interpreter-plugin",
+    "eclair:org.eclairjs.nashorn.JavascriptInterpreter",
+    "--default-interpreter",
+    "eclair",
+    "--nosparkcontext",
+    "--profile",
+    "{connection_file}"
+  ],
+  "codemirror_mode": "javascript"
+}

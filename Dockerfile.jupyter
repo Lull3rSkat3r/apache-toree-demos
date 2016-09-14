@@ -1,0 +1,41 @@
+FROM jupyter/all-spark-notebook
+RUN pip install jupyter_declarativewidgets jupyter_dashboards
+RUN jupyter declarativewidgets quick-setup --sys-prefix
+RUN jupyter dashboards quick-setup --sys-prefix
+
+USER root
+
+# Install dependencies for development with declarative widgets
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl --silent --location https://deb.nodesource.com/setup_0.12 | sudo bash - && \
+    apt-get install --yes nodejs && \
+    npm install -g bower
+
+USER jovyan
+
+RUN mkdir /home/jovyan/.local/share/jupyter/kernels/eclairjs && cp -R /home/jovyan/.local/share/jupyter/kernels/apache_toree_scala/* /home/jovyan/.local/share/jupyter/kernels/eclairjs
+COPY ./docker/kernel.json /home/jovyan/.local/share/jupyter/kernels/eclairjs/
+RUN curl http://repo2.maven.org/maven2/org/eclairjs/eclairjs-nashorn/0.6/eclairjs-nashorn-0.6-jar-with-dependencies.jar -o /home/jovyan/.local/share/jupyter/kernels/eclairjs/eclairjs-nashorn-jar-with-dependencies.jar
+
+
+USER root
+# Install Java.
+# apt-get install  --yes software-properties-common && \
+# add-apt-repository ppa:openjdk-r/ppa -y && \
+ 
+RUN echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections && \
+  echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections && \
+  echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" > /etc/apt/sources.list.d/webupd8team-java.list && \
+  echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list.d/webupd8team-java.list && \
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886 && \
+  apt-get update --fix-missing && \
+  apt-get install --yes --fix-missing oracle-java8-installer && \
+  java -version
+
+
+
+# Define commonly used JAVA_HOME variable
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+
+USER jovyan

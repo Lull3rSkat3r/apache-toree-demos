@@ -1,0 +1,20 @@
+version: "2"
+services:
+  jupyter:
+    user: root
+    build:
+      context: .
+      dockerfile: Dockerfile.jupyter
+    volumes:
+      - ./work:/home/jovyan/work
+    ports:
+      - "8888:8888"
+  kg:
+    ports:
+      - "9999:8888"
+    build:
+      context: .
+      dockerfile: Dockerfile.kg
+    working_dir: /app
+    volumes:
+      - ./work:/app/

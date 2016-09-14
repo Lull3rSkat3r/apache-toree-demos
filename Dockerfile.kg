@@ -1,0 +1,5 @@
+FROM jupyter/all-spark-notebook
+RUN pip install git+https://github.com/Lull3rSkat3r/kernel_gateway.git@fix-comment-parsing
+EXPOSE 8888
+ENTRYPOINT ["tini", "--", "jupyter", "kernelgateway", "--debug", "--KernelGatewayApp.ip=0.0.0.0", "--KernelGatewayApp.api=kernel_gateway.notebook_http", "--KernelGatewayApp.seed_uri=/app/3-hacker-news-rest.ipynb"]
+USER jovyan
